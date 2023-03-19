@@ -53,6 +53,16 @@
         .how-to-play {
             max-width: 90%;
         }
+        #keyboard div {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+#keyboard button {
+    margin: 0 2px;
+}
+
     </style>
 </head>
 <body>
@@ -70,11 +80,14 @@
         <p>Remember, practice makes perfect! Come back daily to improve your skills and beat your high score!</p>
         <button id="startGame">Begin Game</button>
     </div>
-    <div id="game" style="display:none;">
-        <h2 id="currentWord"></h2>
-        <input type="text" id="inputWord" />
-        <div id="timer">60</div>
-    </div>
+<div id="game" style="display:none;">
+    <h2 id="currentWord"></h2>
+    <input type="text" id="inputWord" />
+    <div id="keyboard" style="display:none;"></div> <!-- Add this line -->
+    <button id="submitWord" style="display:none;">Submit</button> <!-- Add this line -->
+    <div id="timer">60</div>
+</div>
+
 <div id="results" style="display:none;">
         <h1>Time's Up!</h1>
         <p>You formed <span id="wordCount"></span> words.</p>
@@ -94,6 +107,9 @@
         const inputWord = document.getElementById("inputWord");
         const timer = document.getElementById("timer");
         const wordCount = document.getElementById("wordCount");
+const submitWordButton = document.getElementById("submitWord");
+submitWordButton.addEventListener("click", checkWord);
+
 
         let wordsFormed = 0;
         let timeLeft = 60;
@@ -104,21 +120,65 @@
         inputWord.addEventListener("keydown", handleKeyDown); 
 
         function startGame() {
-            instructions.style.display = "none";
-            results.style.display = "none";
-            game.style.display = "block";
-            inputWord.value = "";
-            inputWord.focus();
-            wordsFormed = 0;
-            timeLeft = 60;
-            timer.textContent = timeLeft;
-            currentWord.textContent = "cook";
+    instructions.style.display = "none";
+    results.style.display = "none";
+    game.style.display = "block";
+    inputWord.value = "";
+    inputWord.focus();
+    wordsFormed = 0;
+    timeLeft = 60;
+    timer.textContent = timeLeft;
+    currentWord.textContent = "cook";
 
-            // Remove the input event listener attachment from here
+    clearInterval(interval);
+    interval = setInterval(updateTimer, 1000);
 
-            clearInterval(interval);
-            interval = setInterval(updateTimer, 1000);
+    if (shouldDisplayKeyboard()) {
+        createKeyboard();
+        document.getElementById("keyboard").style.display = "block";
+        document.getElementById("submitWord").style.display = "block";
+    
+}
+      
+
+function shouldDisplayKeyboard() {
+    const userAgent = navigator.userAgent;
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+}
+
+function createKeyboard() {
+    const keyboard = document.getElementById("keyboard");
+    const rows = [
+        "QWERTYUIOP",
+        "ASDFGHJKL",
+        "ZXCVBNM"
+    ];
+
+    for (const row of rows) {
+        const rowDiv = document.createElement("div");
+        for (let i = 0; i < row.length; i++) {
+            const button = document.createElement("button");
+            button.textContent = row[i];
+            button.onclick = function () {
+                inputWord.value += row[i];
+            };
+            rowDiv.appendChild(button);
         }
+        keyboard.appendChild(rowDiv);
+    }
+
+    const backspaceButton = document.createElement("button");
+    backspaceButton.textContent = "⌫";
+    backspaceButton.onclick = function () {
+        inputWord.value = inputWord.value.slice(0, -1);
+    };
+    backspaceButton.style.float = "right"; // Align the backspace button to the right
+    keyboard.appendChild(backspaceButton);
+}
+
+}
+
+
 
 
         function updateTimer() {
