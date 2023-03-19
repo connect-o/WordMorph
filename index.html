@@ -116,13 +116,12 @@ const inputWord = document.getElementById("inputWord");
 const timer = document.getElementById("timer");
 const wordCount = document.getElementById("wordCount");
 const submitWordButton = document.getElementById("submitWord");
-submitWordButton.addEventListener("click", function(event) {
-    event.preventDefault();
-    checkWord();
-    inputWord.focus(); // Add this line to refocus the input field
-
-
+submitWordButton.addEventListener("touchstart", function(event) {
+  event.preventDefault();
+  checkWord();
+  inputWord.focus(); // Add this line to refocus the input field
 });
+
 
 
 let wordsFormed = 0;
@@ -139,6 +138,13 @@ inputWord.addEventListener("keyup", function(event) {
         checkWord();
     }
 });
+
+document.addEventListener("touchend", function (event) {
+  if (event.target !== inputWord) {
+    inputWord.focus();
+  }
+});
+
 
 inputWord.addEventListener("input", function(event) {
     if (event.inputType === "insertLineBreak") {
