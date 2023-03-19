@@ -84,6 +84,14 @@
             <p><small>Contact: hello@connect-o.com</small></p>
 
     </div>
+    
+    <div id="game" style="display:none;">
+    <h2 id="currentWord"></h2>
+    <input type="text" id="inputWord" />
+    <button id="submitWord">Submit</button>
+    <div id="timer">60</div>
+</div>
+
     <script>
 
 const startGameButton = document.getElementById("startGame");
@@ -95,6 +103,15 @@ const currentWord = document.getElementById("currentWord");
 const inputWord = document.getElementById("inputWord");
 const timer = document.getElementById("timer");
 const wordCount = document.getElementById("wordCount");
+const submitWordButton = document.getElementById("submitWord");
+submitWordButton.addEventListener("click", function(event) {
+    event.preventDefault();
+    checkWord();
+    inputWord.focus(); // Add this line to refocus the input field
+
+
+});
+
 
 let wordsFormed = 0;
 let timeLeft = 60;
