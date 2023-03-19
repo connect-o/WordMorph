@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <meta property="og:title" content="WordMorph" />
+    <meta property="og:title" content="WordMorph" />
     <meta property="og:description" content="A fun and challenging daily word game!" />
     <meta property="og:image" content="https://static.wixstatic.com/media/06cc25_71d32ef67a17429aaebbea0a5e1139b6~mv2.png" />
     <meta property="og:url" content="http://wordmorph.app/" />
@@ -13,6 +13,9 @@
         body {
             font-family: Roboto, sans-serif;
             text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
         }
 
         button {
@@ -44,26 +47,52 @@
 
         #instructions img {
             height: auto;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 20px;
         }
 
         .logo {
-            max-width: 40%;
+            max-width: 80%;
+            margin-bottom: 20px;
         }
 
-        .how-to-play {
-            max-width: 90%;
-        }
         #keyboard div {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 5px;
-}
+            display: flex;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
 
-#keyboard button {
-    margin: 0 2px;
-}
+        #keyboard button {
+            margin: 0 2px;
+            width: 10%;
+            padding: 0;
+            height: 40px;
+            font-size: 1em;
+        }
 
+        #submitWord {
+            margin-top: 10px;
+        }
+
+        @media only screen and (min-width: 768px) {
+            .logo {
+                max-width: 40%;
+            }
+
+            #keyboard button {
+                width: auto;
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+        }
     </style>
+</head>
+<body>
+    ...
+</body>
+</html>
+
 </head>
 <body>
     <div id="instructions">
@@ -108,7 +137,10 @@
         const timer = document.getElementById("timer");
         const wordCount = document.getElementById("wordCount");
 const submitWordButton = document.getElementById("submitWord");
-submitWordButton.addEventListener("click", checkWord);
+submitWordButton.addEventListener("click", async () => {
+    await checkWord();
+});
+
 
 
         let wordsFormed = 0;
