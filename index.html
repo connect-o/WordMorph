@@ -111,6 +111,15 @@ inputWord.addEventListener("keyup", function(event) {
     }
 });
 
+inputWord.addEventListener("input", function(event) {
+    if (event.inputType === "insertLineBreak") {
+        event.preventDefault();
+        checkWord();
+    }
+});
+
+
+
 
 function startGame(event) {
     event.preventDefault(); // Prevent default button behavior
