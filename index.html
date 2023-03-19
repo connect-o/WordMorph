@@ -204,10 +204,6 @@ function checkWord() {
 
 
 function isOneLetterChange(word1, word2) {
-    if (word1 === word2) {
-        return false;
-    }
-
     const lengthDiff = Math.abs(word1.length - word2.length);
 
     if (lengthDiff > 1) {
@@ -217,13 +213,9 @@ function isOneLetterChange(word1, word2) {
     let minLength = Math.min(word1.length, word2.length);
     let differences = 0;
 
-    for (let i = 0, j = 0; i < minLength && j < minLength;) {
+    for (let i = 0, j = 0; i < minLength && j < minLength; i++, j++) {
         if (word1[i] !== word2[j]) {
             differences++;
-
-            if (differences > 1) {
-                return false;
-            }
 
             if (word1.length > word2.length) {
                 j--;
@@ -231,12 +223,17 @@ function isOneLetterChange(word1, word2) {
                 i--;
             }
         }
-        i++;
-        j++;
     }
 
-    return (differences === 1) || (differences === 0 && lengthDiff === 1);
+    // Add this block of code to account for the remaining characters
+    if (differences === 0 && lengthDiff === 0) {
+        const maxLength = Math.max(word1.length, word2.length);
+        differences = maxLength - minLength;
+    }
+
+    return differences === 1;
 }
+
 
 
 async function isRealWord(word) {
