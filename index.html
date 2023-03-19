@@ -101,7 +101,13 @@
 
                 startGameButton.addEventListener("click", startGame);
         restartGameButton.addEventListener("click", startGame);
-        inputWord.addEventListener("keydown", handleKeyDown); 
+inputWord.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault(); // Prevent the default "Enter" key behavior
+        checkWord();
+    }
+});
+
 
         function startGame() {
             instructions.style.display = "none";
@@ -146,6 +152,14 @@
         checkWord();
     }
 }
+
+function handleKeyDown(event) {
+  if (event.key === "Enter") {
+    event.preventDefault(); // Prevent the default "Enter" key behavior
+    checkWord();
+  }
+}
+
 
 
                 async function checkWord() {
