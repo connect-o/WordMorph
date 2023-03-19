@@ -190,48 +190,36 @@ function endGame() {
     wordCount.textContent = wordsFormed;
 }
 
-function checkWord() {
-    const newWord = inputWord.value.trim(); // Add trim() to remove extra spaces
-    const oldWord = currentWord.textContent;
+let submittedWords = []; // Array to store submitted words
 
-    if (isOneLetterChange(oldWord, newWord)) {
-        wordsFormed++;
-        currentWord.textContent = newWord;
-        inputWord.value = "";
-    }
+function checkWord() {
+  const newWord = inputWord.value.trim();
+  const oldWord = currentWord.textContent;
+  if (isOneLetterChange(oldWord, newWord) && !submittedWords.includes(newWord)) { // Check if the word has not been submitted before
+    wordsFormed++;
+    currentWord.textContent = newWord;
+    inputWord.value = "";
+    submittedWords.push(newWord); // Add the new word to the array of submitted words
+  }
 }
 
 
 
+
 function isOneLetterChange(word1, word2) {
-    const lengthDiff = Math.abs(word1.length - word2.length);
-
-    if (lengthDiff > 1) {
-        return false;
+  const lengthDiff = Math.abs(word1.length - word2.length);
+  if (lengthDiff > 1) {
+    return false;
+  }
+  let minLength = Math.min(word1.length, word2.length);
+  let differences = 0;
+  for (let i = 0; i < minLength; i++) {
+    if (word1[i] !== word2[i]) {
+      differences++;
     }
-
-    let minLength = Math.min(word1.length, word2.length);
-    let differences = 0;
-
-    for (let i = 0, j = 0; i < minLength && j < minLength; i++, j++) {
-        if (word1[i] !== word2[j]) {
-            differences++;
-
-            if (word1.length > word2.length) {
-                j--;
-            } else if (word1.length < word2.length) {
-                i--;
-            }
-        }
-    }
-
-    // Add this block of code to account for the remaining characters
-    if (differences === 0 && lengthDiff === 0) {
-        const maxLength = Math.max(word1.length, word2.length);
-        differences = maxLength - minLength;
-    }
-
-    return differences === 1;
+  }
+  differences += lengthDiff; // Add the remaining characters to the differences count
+  return differences === 1;
 }
 
 
