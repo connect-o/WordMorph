@@ -138,12 +138,15 @@
             wordCount.textContent = wordsFormed;
         }
 
-async function handleKeyDown(event) {
-            if (event.key === "Enter") {
-                event.preventDefault(); // Prevent the default "Enter" key behavior
-                await checkWord();
-            }
-        }
+
+        
+        function handleKeyDown(event) {
+    if (event.key === "Enter") {
+        event.preventDefault(); // Prevent the default "Enter" key behavior
+        checkWord();
+    }
+}
+
 
                 async function checkWord() {
             const newWord = inputWord.value;
