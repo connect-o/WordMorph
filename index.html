@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta property="og:title" content="WordMorph" />
+    <meta property="og:description" content="A fun and challenging daily word game!" />
+    <meta property="og:image" content="https://static.wixstatic.com/media/06cc25_71d32ef67a17429aaebbea0a5e1139b6~mv2.png" />
+    <meta property="og:url" content="http://wordmorph.app/" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap">
+    <title>WordMorph</title>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            text-align: center;
+        }
+
+        button {
+            cursor: pointer;
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            border-radius: 5px;
+        }
+
+        #currentWord {
+            font-size: 2em;
+            color: #4CAF50;
+        }
+
+        #timer {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        #instructions ol {
+            text-align: left;
+            display: inline-block;
+            padding: 5%;
+            margin-top: 0;
+        }
+
+        #instructions img {
+            height: auto;
+        }
+
+        .logo {
+            max-width: 40%;
+        }
+
+        .how-to-play {
+            max-width: 90%;
+        }
+    </style>
+</head>
+<body>
+    <div id="instructions">
+        <img src="https://static.wixstatic.com/media/06cc25_9d9b46ff3d6f4148acc684dcd6380c0d~mv2.png" alt="WordMorph logo" class="logo" />
+        <h2>How to Play</h2>
+        <ol type="1">
+            <li>The game begins with a starting word displayed on the screen.</li>
+            <li>To form a new word, change, add, or remove one letter from the starting word.</li>
+            <li>Type your new word into the textbox and press Enter (Return on mobile).</li>
+            <li>The starting word will be replaced with your new word.</li>
+            <li>Continue forming words until the time runs out. You have 60 seconds!</li>
+        </ol>
+        <img src="https://static.wixstatic.com/media/06cc25_23b1185139324b8f922f14150c3f4b83~mv2.png" alt="WordMorph how to play" class="how-to-play" />
+        <p>Remember, practice makes perfect! Come back daily to improve your skills and beat your high score!</p>
+        <button id="startGame">Begin Game</button>
+    </div>
+    <div id="game" style="display:none;">
+        <h2 id="currentWord"></h2>
+        <input type="text" id="inputWord" />
+        <div id="timer">60</div>
+    </div>
+<div id="results" style="display:none;">
+        <h1>Time's Up!</h1>
+        <p>You formed <span id="wordCount"></span> words.</p>
+        <button id="restartGame">Try Again</button>
+        <button id="shareScore">Share</button>
+                    <p>Don't forget to share your score!<br>See you tomorrow for the next game :)</p>
+            <p><small>Contact: hello@connect-o.com</small></p>
+        
+    </div>
+    <script>
+        const startGameButton = document.getElementById("startGame");
+        const restartGameButton = document.getElementById("restartGame");
+        const instructions = document.getElementById("instructions");
+        const game = document.getElementById("game");
+        const results = document.getElementById("results");
+        const currentWord = document.getElementById("currentWord");
+        const inputWord = document.getElementById("inputWord");
+        const timer = document.getElementById("timer");
+        const wordCount = document.getElementById("wordCount");
+
+        let wordsFormed = 0;
+        let timeLeft = 60;
+        let interval;
+
+                startGameButton.addEventListener("click", startGame);
+        restartGameButton.addEventListener("click", startGame);
+        inputWord.addEventListener("keydown", handleKeyDown); 
+
+        function startGame() {
+            instructions.style.display = "none";
+            results.style.display = "none";
+            game.style.display = "block";
+            inputWord.value = "";
+            inputWord.focus();
+            wordsFormed = 0;
+            timeLeft = 60;
+            timer.textContent = timeLeft;
+            currentWord.textContent = "cook";
+
+            // Remove the input event listener attachment from here
+
+            clearInterval(interval);
+            interval = setInterval(updateTimer, 1000);
+        }
+
+
+        function updateTimer() {
+            timeLeft--;
+            timer.textContent = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+                endGame();
+            }
+        }
+
+        function endGame() {
+            inputWord.removeEventListener("input", checkWord);
+            game.style.display = "none";
+            results.style.display = "block";
+            wordCount.textContent = wordsFormed;
+        }
+
+async function handleKeyDown(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent the default "Enter" key behavior
+                await checkWord();
+            }
+        }
+
+                async function checkWord() {
+            const newWord = inputWord.value;
+            const oldWord = currentWord.textContent;
+
+            if (isOneLetterChange(oldWord, newWord) && await isRealWord(newWord)) {
+                wordsFormed++;
+                currentWord.textContent = newWord;
+                inputWord.value = "";
+            }
+        }
+
+           function isOneLetterChange(word1, word2) {
+            const lengthDiff = Math.abs(word1.length - word2.length);
+
+            if (lengthDiff > 1) {
+                return false;
+            }
+
+            let minLength = Math.min(word1.length, word2.length);
+            let differences = 0;
+
+            for (let i = 0, j = 0; i < minLength && j < minLength; i++, j++) {
+                if (word1[i] !== word2[j]) {
+                    differences++;
+
+                    if (word1.length > word2.length) {
+                        j--;
+                    } else if (word1.length < word2.length) {
+                        i--;
+                    }
+                }
+            }
+
+            return differences === 1 || (differences === 0 && lengthDiff === 1);
+        }
+
+        async function isRealWord(word) {
+            const response = await fetch(`https://api.datamuse.com/words?sp=${word}&max=1`);
+            const data = await response.json();
+
+            return data.length > 0 && data[0].word === word;
+        }
+const shareScoreButton = document.getElementById("shareScore");
+        shareScoreButton.addEventListener("click", shareScore);
+
+        function shareScore() {
+            const score = wordsFormed;
+            const gameURL = "http://wordmorph.app/"; // Replace with your game's URL
+            const shareText = `I formed ${score} words in WordMorph! Can you beat my score? Play now: ${gameURL}`;
+
+            if (navigator.share) {
+                // For mobile devices
+                navigator.share({
+                    title: "WordMorph",
+                    text: shareText,
+                    url: gameURL,
+                }).catch((error) => console.error("Error sharing:", error));
+            } else {
+                // For desktop browsers
+                const tempInput = document.createElement("input");
+                tempInput.value = shareText;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempInput);
+                alert("Your score and game link have been copied to the clipboard!");
+            }
+        }
+    </script>
+</body>
+</html>
+
