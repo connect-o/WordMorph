@@ -191,7 +191,7 @@ function endGame() {
 }
 
 function checkWord() {
-    const newWord = inputWord.value;
+    const newWord = inputWord.value.trim(); // Add trim() to remove extra spaces
     const oldWord = currentWord.textContent;
 
     if (isOneLetterChange(oldWord, newWord)) {
@@ -200,6 +200,7 @@ function checkWord() {
         inputWord.value = "";
     }
 }
+
 
 
 function isOneLetterChange(word1, word2) {
