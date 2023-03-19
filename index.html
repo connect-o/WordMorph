@@ -104,12 +104,13 @@ startGameButton.addEventListener("click", startGame);
 restartGameButton.addEventListener("click", startGame);
 
 // Add event listener for "Enter" key press on mobile keyboard
-inputWord.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
+inputWord.addEventListener("keyup", function(event) {
+    if (event.key === "Enter" || event.keyCode === 13) {
         event.preventDefault();
         checkWord();
     }
 });
+
 
 function startGame(event) {
     event.preventDefault(); // Prevent default button behavior
