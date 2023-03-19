@@ -84,7 +84,7 @@
     </div>
     <div id="game" style="display:none;">
         <h2 id="currentWord"></h2>
-<input type="text" id="inputWord" autocapitalize="none" autocorrect="off" autocomplete="off" spellcheck="false" />
+        <input type="text" id="inputWord" autocapitalize="none" autocorrect="off" autocomplete="off" spellcheck="false" />
         <br>
         <br>
         <button id="submitWord">Submit</button>
@@ -116,10 +116,10 @@ const inputWord = document.getElementById("inputWord");
 const timer = document.getElementById("timer");
 const wordCount = document.getElementById("wordCount");
 const submitWordButton = document.getElementById("submitWord");
-submitWordButton.addEventListener("touchstart", function(event) {
+submitWordButton.addEventListener("click", function(event) {
   event.preventDefault();
   checkWord();
-  inputWord.focus(); // Add this line to refocus the input field
+  inputWord.focus();
 });
 
 
@@ -139,11 +139,7 @@ inputWord.addEventListener("keyup", function(event) {
     }
 });
 
-document.addEventListener("touchend", function (event) {
-  if (event.target !== inputWord) {
-    inputWord.focus();
-  }
-});
+
 
 
 inputWord.addEventListener("input", function(event) {
@@ -190,16 +186,37 @@ function endGame() {
     wordCount.textContent = wordsFormed;
 }
 
-let submittedWords = []; // Array to store submitted words
+const usedWords = new Set(); // Create a Set to keep track of used words
 
-function checkWord() {
+async function checkWord() {
   const newWord = inputWord.value.trim();
   const oldWord = currentWord.textContent;
-  if (isOneLetterChange(oldWord, newWord) && !submittedWords.includes(newWord)) { // Check if the word has not been submitted before
-    wordsFormed++;
-    currentWord.textContent = newWord;
+
+  // Check if the new word is the same as the old word
+  if (newWord === oldWord) {
+    inputWord.style.backgroundColor = "red";
+    setTimeout(() => inputWord.style.backgroundColor = "", 500);
     inputWord.value = "";
-    submittedWords.push(newWord); // Add the new word to the array of submitted words
+    return;
+  }
+
+  // Check if the new word is valid
+  if (isOneLetterChange(oldWord, newWord)) {
+    const isValidWord = await isRealWord(newWord);
+    if (isValidWord && !usedWords.has(newWord)) {
+      wordsFormed++;
+      currentWord.textContent = newWord;
+      inputWord.value = "";
+      usedWords.add(newWord); // Add the new word to the list of used words
+    } else {
+      inputWord.style.backgroundColor = "red";
+      setTimeout(() => inputWord.style.backgroundColor = "", 500);
+      inputWord.value = "";
+    }
+  } else {
+    inputWord.style.backgroundColor = "red";
+    setTimeout(() => inputWord.style.backgroundColor = "", 500);
+    inputWord.value = "";
   }
 }
 
@@ -207,20 +224,33 @@ function checkWord() {
 
 
 function isOneLetterChange(word1, word2) {
-  const lengthDiff = Math.abs(word1.length - word2.length);
-  if (lengthDiff > 1) {
+  // Check if the length of the two words differ by more than 1
+  if (Math.abs(word1.length - word2.length) > 1) {
     return false;
   }
-  let minLength = Math.min(word1.length, word2.length);
+
   let differences = 0;
-  for (let i = 0; i < minLength; i++) {
-    if (word1[i] !== word2[i]) {
+  let longerWord = word1.length > word2.length ? word1 : word2;
+  let shorterWord = word1.length > word2.length ? word2 : word1;
+
+  for (let i = 0, j = 0; i < longerWord.length; i++, j++) {
+    if (longerWord[i] !== shorterWord[j]) {
       differences++;
+      // If there are more than one differences, return false
+      if (differences > 1) {
+        return false;
+      }
+      // If the words are different lengths, adjust the shorterWord index
+      if (longerWord.length !== shorterWord.length) {
+        j--;
+      }
     }
   }
-  differences += lengthDiff; // Add the remaining characters to the differences count
+
+  // If there is exactly one difference, return true
   return differences === 1;
 }
+
 
 
 
