@@ -17,12 +17,12 @@
 
         button {
             cursor: pointer;
-            padding: 10px 20px;
+            padding: 10px 18px;
             font-size: 1em;
             background-color: #4CAF50;
             border: none;
             color: white;
-            border-radius: 5px;
+            border-radius: 50px;
         }
 
         #currentWord {
@@ -38,7 +38,7 @@
         #instructions ol {
             text-align: left;
             display: inline-block;
-            padding: 5%;
+            padding: 0%;
             margin-top: 0;
         }
 
@@ -47,15 +47,26 @@
         }
 
         .logo {
-            max-width: 40%;
+            max-width: 70%;
         }
 
         .how-to-play {
-            max-width: 90%;
+            max-width: 100%;
         }
+        
+#pageWrapper {
+    max-width: 500px; /* You can change this value to your desired max-width */
+    margin: 0 auto; /* Change from 0 10% to 0 auto */
+    padding: 0 20px;
+}
+
+
     </style>
 </head>
 <body>
+
+<div id="pageWrapper">
+    <div class="container">
     <div id="instructions">
         <img src="https://static.wixstatic.com/media/06cc25_9d9b46ff3d6f4148acc684dcd6380c0d~mv2.png" alt="WordMorph logo" class="logo" />
         <h2>How to Play</h2>
@@ -73,18 +84,21 @@
     <div id="game" style="display:none;">
         <h2 id="currentWord"></h2>
         <input type="text" id="inputWord" />
+        <br>
+        <br>
         <button id="submitWord">Submit</button>
         <div id="timer">60</div>
     </div>
-    <div id="results" style="display:none;">
 <div id="results" style="display:none;">
-        <h1>Time's Up!</h1>
-        <p>You formed <span id="wordCount"></span> words.</p>
-        <button id="restartGame">Try Again</button>
-        <button id="shareScore">Share</button>
-                    <p>Don't forget to share your score!<br>See you tomorrow for the next game :)</p>
-            <p><small>Contact: hello@connect-o.com</small></p>
+    <h1>Time's Up!</h1>
+    <p>You formed <span id="wordCount"></span> words.</p>
+    <button id="restartGame">Try Again</button>
+    <button id="shareScore">Share</button>
+    <p>Don't forget to share your score!<br>See you tomorrow for the next game :)</p>
+    <p><small>Contact: hello@connect-o.com</small></p>
+</div>
 
+  </div>
     </div>
     
 
