@@ -10,6 +10,7 @@
 
   gtag('config', 'G-JHVFW32CC1');
 </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <meta property="og:title" content="WordMorph" />
@@ -84,7 +85,7 @@
     </style>
 </head>
 <body>
-
+<script src="words.js"></script>
 <div id="pageWrapper">
     <div class="container">
     <div id="instructions">
@@ -208,7 +209,7 @@ function endGame() {
 const usedWords = new Set(); // Create a Set to keep track of used words
 
 async function checkWord() {
-  const newWord = inputWord.value.trim();
+  const newWord = inputWord.value.trim().toLowerCase();
   const oldWord = currentWord.textContent;
 
   // Check if the new word is the same as the old word
@@ -273,12 +274,10 @@ function isOneLetterChange(word1, word2) {
 
 
 
-async function isRealWord(word) {
-    const response = await fetch(`https://api.datamuse.com/words?sp=${word}&max=1`);
-    const data = await response.json();
-
-    return data.length > 0 && data[0].word === word;
+function isRealWord(word) {
+  return wordArray.includes(word);
 }
+
 
 const shareScoreButton = document.getElementById("shareScore");
 shareScoreButton.addEventListener("click", shareScore);
