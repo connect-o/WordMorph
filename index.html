@@ -180,7 +180,7 @@ function startGame(event) {
     wordsFormed = 0;
     timeLeft = 60;
     timer.textContent = timeLeft;
-    currentWord.textContent = "shop";
+    currentWord.textContent = "torn";
 
     clearInterval(interval);
     interval = setInterval(updateTimer, 1000);
@@ -272,9 +272,22 @@ function isOneLetterChange(word1, word2) {
 
 
 
-function isRealWord(word) {
-  return wordArray.includes(word);
+async function isRealWord(word) {
+  if (wordArray.includes(word)) {
+    return true;
+  } else {
+    const apiUrl = `https://api.datamuse.com/words?sp=${word}&max=1`;
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    if (data.length > 0 && data[0].word === word) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
+
 
 
 const shareScoreButton = document.getElementById("shareScore");
