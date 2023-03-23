@@ -109,13 +109,15 @@
         <div id="timer">60</div>
     </div>
 <div id="results" style="display:none;">
-    <h1>Time's Up!</h1>
-    <p>You formed <span id="wordCount"></span> words.</p>
+    <p>Time's Up!</p>
+    <h1>You formed <span id="wordCount"></span> words</h1>
+    <p id="scoreMessage"></p>
     <button id="restartGame">Try Again</button>
     <button id="shareScore">Share</button>
     <p>Don't forget to share your score!<br>See you tomorrow for the next game :)</p>
     <p><small>Contact: hello@connect-o.com</small></p>
 </div>
+
 
   </div>
     </div>
@@ -202,7 +204,31 @@ function endGame() {
     game.style.display = "none";
     results.style.display = "block";
     wordCount.textContent = wordsFormed;
+
+    const scoreMessage = document.getElementById("scoreMessage");
+
+
+    if (wordsFormed < 5) {
+        scoreMessage.innerHTML = "That's not great, maybe try again?";
+        scoreMessage.style.color = "red";
+    } else if (wordsFormed >= 5 && wordsFormed < 10) {
+        scoreMessage.innerHTML = "That's not bad, will you beat it tomorrow?";
+        scoreMessage.style.color = "orange";
+    } else if (wordsFormed >= 10 && wordsFormed < 15) {
+        scoreMessage.innerHTML = "Hey, you're really good at this!";
+        scoreMessage.style.color = "green";
+    } else if (wordsFormed >= 15 && wordsFormed < 20) {
+        scoreMessage.innerHTML = "Wow! You're great at this!";
+        scoreMessage.style.color = "blue";
+    } else {
+        scoreMessage.innerHTML = "Seriously? I didn't think it was possible to score this high...";
+        scoreMessage.style.color = "pink";
+    }
+
+    scoreMessage.style.fontWeight = "bold";
 }
+
+
 
 const usedWords = new Set(); // Create a Set to keep track of used words
 
