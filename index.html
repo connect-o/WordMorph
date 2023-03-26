@@ -28,6 +28,9 @@
             background-position: center;
             background-size: cover;
         }
+          h3 {
+    color: #09b077;
+  }
 
         button {
             cursor: pointer;
@@ -88,18 +91,15 @@
 <script src="words.js"></script>
 <div id="pageWrapper">
     <div class="container">
-    <div id="instructions">
-        <img src="https://static.wixstatic.com/media/06cc25_8b57c4af30e1464abafff2b50621127d~mv2.png" alt="WordMorph logo" class="logo" />
-        <h2>How to Play</h2>
-        <ol type="1">
-            <li>Change, add, or remove one letter from the starting word to create a new word.</li>
-            <li>Your new word will replace the starting word.</li>
-            <li>Keep forming new words until the 60-second timer runs out.</li>
-        </ol>
-        <img src="https://static.wixstatic.com/media/06cc25_23b1185139324b8f922f14150c3f4b83~mv2.png" alt="WordMorph how to play" class="how-to-play" />
-        <p>Remember, practice makes perfect! Come back daily to improve your skills and beat your high score!</p>
-        <button id="startGame">Begin Game</button>
-    </div>
+<div id="instructions">
+  <img src="https://static.wixstatic.com/media/06cc25_8b57c4af30e1464abafff2b50621127d~mv2.png" alt="WordMorph logo" class="logo" />
+  <h3>Transform words by changing, adding, or removing one letter at a time!</h3>
+
+  <img src="https://static.wixstatic.com/media/06cc25_23b1185139324b8f922f14150c3f4b83~mv2.png" alt="WordMorph how to play" class="how-to-play" />
+  <p>Practice makes perfect! Play daily to improve your skills and beat your high score!</p>
+  <button id="startGame">Begin Game</button>
+</div>
+
     <div id="game" style="display:none;">
         <h2 id="currentWord"></h2>
         <input type="text" id="inputWord" autocapitalize="none" autocorrect="off" autocomplete="off" spellcheck="false" />
@@ -220,10 +220,10 @@ function endGame() {
     } else if (wordsFormed >= 15 && wordsFormed < 20) {
         scoreMessage.innerHTML = "Wow! You're great at this!";
         scoreMessage.style.color = "green";
-    } else {
-        scoreMessage.innerHTML = "Seriously? I didn't think it was possible to score this high...";
-        scoreMessage.style.color = "green";
-    }
+  } else if (wordsFormed >= 20) { // Add this condition to handle scores >= 20
+    scoreMessage.innerHTML = "You're a WordMorph master! Incredible!";
+    scoreMessage.style.color = "green";
+  }
 
     scoreMessage.style.fontWeight = "bold";
 }
@@ -342,6 +342,7 @@ function shareScore() {
         alert("Your score and game link have been copied to the clipboard!");
     }
 }
+
 
     </script>
 </body>
