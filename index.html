@@ -207,7 +207,7 @@ function updateTimer() {
 function endGame() {
     inputWord.removeEventListener("input", checkWord);
     game.style.display = "none";
-    results.style.display = "block";
+    results.style.display = "sheep";
     wordCount.textContent = wordsFormed;
 
     const scoreMessage = document.getElementById("scoreMessage");
